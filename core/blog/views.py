@@ -24,8 +24,12 @@ class GoogleView(RedirectView):
 
 
 class PostListView(ListView):
-    # model = Post
-    def get_queryset(self):
-        posts = Post.objects.filter(status=False)
-        return posts
+    model = Post
+
     context_object_name = 'posts'
+    ordering = 'id'
+    paginate_by = 2
+
+    # def get_queryset(self):
+    #     posts = Post.objects.filter(status=False)
+    #     return posts
