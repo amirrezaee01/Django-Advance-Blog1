@@ -1,26 +1,10 @@
 from django.shortcuts import render
 from django.views.generic.base import TemplateView, RedirectView
 from .models import Post
-from django.views.generic.list import ListView
+from django.views.generic import ListView, DeleteView, CreateView
+from .models import Post
+from .forms import PostForm
 # Create your views here.
-
-
-def indexview(request):
-    return render(request, 'index.html')
-
-
-class Indexview(TemplateView):
-    template_name = 'index.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['name'] = 'amir'
-        context['posts'] = Post.objects.all()
-        return context
-
-
-class GoogleView(RedirectView):
-    url = 'https://www.google.com'
 
 
 class PostListView(ListView):
@@ -28,8 +12,18 @@ class PostListView(ListView):
 
     context_object_name = 'posts'
     ordering = 'id'
-    paginate_by = 2
+    # paginate_by = 2
 
     # def get_queryset(self):
     #     posts = Post.objects.filter(status=False)
     #     return posts
+
+
+class PostDetailView(DeleteView):
+    model = Post
+
+
+class PostCreateView(CreateView):
+    model = Post
+    form_class = PostForm
+    success_url = '/blog/post/'
