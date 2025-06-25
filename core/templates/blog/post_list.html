@@ -15,6 +15,12 @@
             <a href="{% url 'blog:post-detail' pk=post.id %}">
                 <h2> {{post.id}} -{{post.title}}</h2>
             </a>
+            <a href="{% url 'blog:post-delete' pk=post.id %}">
+                <h5>Delete</h5>
+            </a>
+            <a href="{% url 'blog:post-edit' pk=post.id %}">
+                <h5>Edit</h5>
+            </a>
             <small>{{post.author}} - {{post.published_date}}</small>
         </li>
         {% endfor %}
@@ -37,6 +43,13 @@
             {% endif %}
         </span>
     </div>
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 1000;"
+        class="bg-blue-600 text-white p-4 rounded-lg shadow-lg">
+        <a href="{% url 'blog:post-create' %}">
+            <h2>create post</h2>
+        </a>
+    </div>
+
 </body>
 
 </html>
