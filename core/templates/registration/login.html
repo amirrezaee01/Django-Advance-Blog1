@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Tailwind CSS CDN for easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            /* Using Inter font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f4f8;
+            /* Light background */
+        }
+
+        /* Styling for elements rendered by Django's {{ form.as_p }} */
+        form p {
+            margin-bottom: 1rem;
+            /* Spacing between form fields */
+        }
+
+        form label {
+            display: block;
+            /* Make labels appear on their own line */
+            font-weight: bold;
+            color: #4a5568;
+            /* Tailwind's gray-700 */
+            margin-bottom: 0.5rem;
+            /* Space between label and input */
+            font-size: 0.875rem;
+            /* Tailwind's text-sm */
+        }
+
+        form input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            /* Equivalent to py-3 px-4 */
+            border: 1px solid #cbd5e0;
+            /* Tailwind's border-gray-300 */
+            border-radius: 0.5rem;
+            /* Tailwind's rounded-lg */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            /* Tailwind's shadow */
+            line-height: 1.25;
+            /* Tailwind's leading-tight */
+            color: #4a5568;
+            /* Tailwind's gray-700 */
+        }
+
+        form input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+            /* Tailwind's focus:ring-2 focus:ring-blue-500 */
+            border-color: transparent;
+            /* Remove default border on focus */
+        }
+
+        /* Basic styling for form errors if Django renders them as ul/li within {{ form.as_p }} */
+        form ul.errorlist {
+            color: #ef4444;
+            /* Tailwind's text-red-500 */
+            font-size: 0.875rem;
+            /* Tailwind's text-sm */
+            margin-top: 0.5rem;
+            list-style: disc;
+            padding-left: 1.25rem;
+        }
+
+        form ul.errorlist li {
+            margin-bottom: 0.25rem;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Login Form</h1>
+        <form method="POST" action=""> {# action can be left empty if it posts to the same URL #}
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit"
+                class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline transition duration-200 ease-in-out transform hover:scale-105 w-full">
+                Login
+            </button>
+        </form>
+    </div>
+</body>
+
+</html>
