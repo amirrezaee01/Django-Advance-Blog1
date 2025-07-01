@@ -5,15 +5,27 @@ from ...models import Post
 from django.shortcuts import get_object_or_404
 
 
-@api_view()
+@api_view(["GET", "POST"])
 def post_list(request):
-    posts = Post.objects.filter(status=True)
-    serializer = PostSerializer(posts, many=True)
-    return Response(serializer.data)
+    if request.method == "GET":
+        posts = Post.objects.filter(status=True)
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
+    elif request.method == "POST":
+        serializer = PostSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
-@api_view()
+@api_view(["GET", "PUT"])
 def PostDetail(request, id):
     post = get_object_or_404(Post, pk=id, status=True)
-    serializer = PostSerializer(post)
-    return Response(serializer.data)
+    if request.method == "GET":
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
+    elif request.method == "PUT":
+        serializer = PostSerializer(post, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
