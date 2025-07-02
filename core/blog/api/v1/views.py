@@ -1,11 +1,14 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from .serializer import PostSerializer
 from ...models import Post
 from django.shortcuts import get_object_or_404
+from rest_framework import status
 
 
 @api_view(["GET", "POST"])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def post_list(request):
     if request.method == "GET":
         posts = Post.objects.filter(status=True)
@@ -18,7 +21,8 @@ def post_list(request):
         return Response(serializer.data)
 
 
-@api_view(["GET", "PUT"])
+@api_view(["GET", "PUT", "DELETE"])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def PostDetail(request, id):
     post = get_object_or_404(Post, pk=id, status=True)
     if request.method == "GET":
@@ -29,3 +33,7 @@ def PostDetail(request, id):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+    elif request.method == "DELETE":
+        post.delete()
+        return Response({"detail": "item removed successfully"},
+                        status=status.HTTP_204_NO_CONTENT)
