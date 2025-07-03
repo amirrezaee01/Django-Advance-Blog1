@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 app_name = 'api-v1'
 
 urlpatterns = [
-    path('post/', post_list, name='post-list'),
+    path('post/', PostList.as_view(), name='post-list'),
     path('post/<int:id>/', PostDetail, name='post-detail'),
 
 ]
