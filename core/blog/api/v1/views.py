@@ -8,21 +8,10 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework import viewsets
+from .permissions import IsOwnerOrReadOnly
 
 
-class PostList(ListCreateAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    serializer_class = PostSerializer
-    queryset = Post.objects.filter(status=True)
-
-
-class PostDetail(RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    serializer_class = PostSerializer
-    queryset = Post.objects.filter(status=True)
-
-
-class PostModelViewSet(viewsets.ModelViewSet):
+class PostModelViewSet(viewsets.ModelViewSet, IsOwnerOrReadOnly):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status=True)
