@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from ...models import Post, Category
+from accounts.models import Profile
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -17,8 +18,9 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ["id", 'author', "title", "content", "status", 'category', "snippet", "relative_url",
+        fields = ["id", 'author', "image", "title", "content", "status", 'category', "snippet", "relative_url",
                   "absolute_url", "created_date", "published_date",]
+        read_only_fields = ['author']
 
     def get_abs_url(self, obj):
         request = self.context.get('request')
@@ -38,3 +40,8 @@ class PostSerializer(serializers.ModelSerializer):
 
         rep['category'] = CategorySerializer(instance.category).data
         return rep
+
+    def create(self, validated_data):
+        validated_data['author'] = Profile.objects.get(
+            user__id=self.context.get('request').user.id)
+        return super().create(validated_data)
