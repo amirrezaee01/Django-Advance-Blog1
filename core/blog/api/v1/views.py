@@ -11,6 +11,7 @@ from rest_framework import viewsets
 from .permissions import IsOwnerOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from .paginations import LargeResultsSetPagination
 
 
 class PostModelViewSet(viewsets.ModelViewSet, IsOwnerOrReadOnly):
@@ -20,7 +21,8 @@ class PostModelViewSet(viewsets.ModelViewSet, IsOwnerOrReadOnly):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['category', 'author', 'status']
     search_fields = ['title', 'content']
-    OrderingFilter = ['published_date']
+    ordering_fields = ['published_date']
+    pagination_class = LargeResultsSetPagination
 
 
 class CategoryModelViewSet(viewsets.ModelViewSet):
