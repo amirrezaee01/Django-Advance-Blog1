@@ -1,12 +1,15 @@
 from rest_framework import generics
 from rest_framework.response import Response
-from .serializer import RegistrationSerializer, CustomAuthTokenSerializer, CustomTokenObtainPairSerializer
+from .serializer import *
 from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class RegistrationApiView(generics.GenericAPIView):
@@ -49,3 +52,33 @@ class CustomDiscardAuthToken(APIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+
+class ChangePasswordApiView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ChangePasswordSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def put(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            if not user.check_password(serializer.validated_data['old_password']):
+                return Response(
+                    {"old_password": ["Wrong password."]},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            user.set_password(serializer.validated_data['new_password'])
+            user.save()
+
+            return Response({
+                "email": user.email,
+                "message": "Password changed successfully."
+            }, status=status.HTTP_200_OK)
+
+        # ❗ This is important — handle the invalid case
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
