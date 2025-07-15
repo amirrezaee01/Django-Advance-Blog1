@@ -10,6 +10,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from ...models import Profile
+from django.core.mail import send_mail
 
 User = get_user_model()
 
@@ -63,7 +64,7 @@ class ChangePasswordApiView(generics.GenericAPIView):
     def get_object(self):
         return self.request.user
 
-    def put(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         user = self.get_object()
         serializer = self.get_serializer(data=request.data)
 
@@ -93,3 +94,14 @@ class ProfileApiView(generics.RetrieveUpdateAPIView):
         queryset = self.get_queryset()
         obj = get_object_or_404(queryset, user=self.request.user)
         return obj
+
+
+class TestEmailSend(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        send_mail(
+            "Subject",
+            "Message.",
+            "from@example.com",
+            ["john@example.com", "jane@example.com"],
+        )
+        return Response('email sent', status=status.HTTP_200_OK)
