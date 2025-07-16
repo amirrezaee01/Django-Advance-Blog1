@@ -5,10 +5,9 @@ Hello {{ user.name }}
 {% endblock %}
 
 {% block body %}
-This is a plain text part.
+account activation
 {% endblock %}
 
 {% block html %}
-<p>This is an <strong>HTML</strong> part.</p>
-
+{{token}}
 {% endblock %}
