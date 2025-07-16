@@ -17,6 +17,10 @@ urlpatterns = [
     # activation
     path('activation/confirm/<str:token>/',
          ActivationApiView.as_view(), name='activation'),
+
+    # resend activation
+    path('activation/resend/', ActivationResendApiView.as_view(),
+         name='resend_activation'),
     # chamne password
     path('change-password/', ChangePasswordApiView.as_view(), name='change_password'),
 
