@@ -1,6 +1,6 @@
+from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
+                                        PermissionsMixin)
 from django.db import models
-from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser, PermissionsMixin)
 from django.utils.translation import gettext_lazy as _
 
 
@@ -17,15 +17,15 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, email, password, **extra_fields):
 
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
-        extra_fields.setdefault('is_verified', True)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("is_verified", True)
 
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError(_('superuser must have is_staff=True'))
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError(_('superuser must have is_superuser=True'))
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError(_("superuser must have is_staff=True"))
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError(_("superuser must have is_superuser=True"))
         return self.create_user(email, password, **extra_fields)
 
 
@@ -36,7 +36,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     created_date = models.DateTimeField(auto_now_add=True)
