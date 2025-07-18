@@ -17,7 +17,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs.get("password") != attrs.get("password1"):
-            raise serializers.ValidationError({"detail": "password do not match"})
+            raise serializers.ValidationError(
+                {"detail": "password do not match"})
 
         try:
             validate_password(attrs.get("password"))
@@ -90,12 +91,14 @@ class ChangePasswordSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         if attrs.get("new_password") != attrs.get("new_password1"):
-            raise serializers.ValidationError({"detail": "New passwords do not match"})
+            raise serializers.ValidationError(
+                {"detail": "New passwords do not match"})
 
         try:
             validate_password(attrs.get("new_password"))
         except exceptions.ValidationError as e:
-            raise serializers.ValidationError({"new_password": list(e.messages)})
+            raise serializers.ValidationError(
+                {"new_password": list(e.messages)})
 
         return super().validate(attrs)
 
@@ -105,7 +108,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ["id", "email", "first_name", "last_name", "image", "description"]
+        fields = ["id", "email", "first_name",
+                  "last_name", "image", "description"]
 
 
 class ActivationResendSerializer(serializers.Serializer):
@@ -120,6 +124,7 @@ class ActivationResendSerializer(serializers.Serializer):
                 {"email": "User with this email does not exist."}
             )
         if user_obj.is_verified:
-            raise serializers.ValidationError({"email": "User is already verified."})
+            raise serializers.ValidationError(
+                {"email": "User is already verified."})
         attrs["user"] = user_obj
         return super().validate(attrs)
