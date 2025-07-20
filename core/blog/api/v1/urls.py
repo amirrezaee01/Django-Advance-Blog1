@@ -8,10 +8,3 @@ router = DefaultRouter()
 router.register(r"post", PostModelViewSet, basename="post")
 router.register(r"category", CategoryModelViewSet, basename="category")
 urlpatterns = router.urls
-
-# urlpatterns = [
-#     path('post/', PostList.as_view(), name='post-list'),
-#     path('post/<int:pk>/', PostDetail.as_view(), name='post-detail'),
-
-# ]
-# urlpatterns += router.urls
